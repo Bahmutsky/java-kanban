@@ -43,9 +43,40 @@ public class TaskManager {
     public Task updateTask(Task updatedTask) {
         int id = updatedTask.getId();
 
-        return updatedTask;
+        if(idToTask.containsKey(id) && updatedTask.getClass() == Task.class) {
+            idToTask.put(updatedTask.getId(), updatedTask);
+            System.out.println("Задача обновлена");
+            return updatedTask;
+
+        } else if(idToSubtask.containsKey(id) && updatedTask.getClass() == Subtask.class) {
+            Subtask subtaskMap = (Subtask) idToSubtask.get(updatedTask.getId());
+            Subtask subtaskTemp = (Subtask) updatedTask;
+
+            if(subtaskTemp.getCurrentEpic() == null) {
+                subtaskTemp.setCurrentEpic(subtaskMap.getCurrentEpic());
+            }
+
+            subtaskMap.getCurrentEpic().addSubtask(id, subtaskTemp);
+            subtaskMap.getCurrentEpic().refreshEpicStatus();
+            idToSubtask.put(id, subtaskTemp);
+            System.out.print("Подзадача обновлена");
+            return subtaskTemp;
+
+        } else if (idToEpic.containsKey(id) && updatedTask.getClass() == Epic.class) {
+            idToEpic.put(id, updatedTask);
+            System.out.print("Эпик обновлен");
+            return updatedTask;
+
+        } else {
+            System.out.print("Задачи с таким id нет");
+            return null;
+        }
     }
 
+    public Task deleteTask(Task deleteTask) {
+
+        return deleteTask;
+    }
     private int generateNewId() {
         return id++;
     }
