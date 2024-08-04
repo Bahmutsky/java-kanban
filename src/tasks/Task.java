@@ -1,7 +1,5 @@
 package tasks;
 
-import java.util.*;
-
 public class Task {
     protected Integer id;
     protected String name;
@@ -23,12 +21,6 @@ public class Task {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.status = TaskStatus.NEW;
-    }
-
-    public Task(Integer id, String name) {
-        this.id = id;
-        this.name = name;
         this.status = TaskStatus.NEW;
     }
 
@@ -56,8 +48,8 @@ public class Task {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public TaskStatus getStatus() {
+        return status;
     }
 
     @Override
@@ -75,6 +67,6 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id;
+        return this.id == task.id;
     }
 }

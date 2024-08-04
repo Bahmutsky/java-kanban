@@ -35,7 +35,28 @@ public class Epic extends Task{
     }
 
     public void refreshEpicStatus() {
+        int countNew = 0;
+        int countDone = 0;
 
+        if (subtasks.isEmpty()) {
+            this.status = TaskStatus.NEW;
+        } else {
+            for (Task subtask : subtasks.values()) {
+                if (subtask.getStatus().equals(TaskStatus.NEW)) {
+                    countNew++;
+                } else if (subtask.getStatus().equals(TaskStatus.DONE)){
+                    countDone++;
+                }
+            }
+
+            if (countNew == subtasks.size()) {
+                this.status = TaskStatus.NEW;
+            } else if (countDone == subtasks.size()) {
+                this.status = TaskStatus.DONE;
+            } else {
+                this.status = TaskStatus.IN_PROGRESS;
+            }
+        }
     }
 
     @Override
