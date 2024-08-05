@@ -11,6 +11,7 @@ public class Epic extends Task{
     }
 
     public Epic(String name, String description) {
+
         super(name, description);
     }
 
@@ -42,9 +43,13 @@ public class Epic extends Task{
             this.status = TaskStatus.NEW;
         } else {
             for (Task subtask : subtasks.values()) {
-                if (subtask.getStatus().equals(TaskStatus.NEW)) {
+                TaskStatus subStatus = subtask.getStatus();
+
+                if (subStatus.equals(TaskStatus.IN_PROGRESS)) {
+                    break;
+                } else if (subStatus.equals(TaskStatus.NEW)) {
                     countNew++;
-                } else if (subtask.getStatus().equals(TaskStatus.DONE)){
+                } else if (subStatus.equals(TaskStatus.DONE)){
                     countDone++;
                 }
             }
