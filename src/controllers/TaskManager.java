@@ -3,6 +3,7 @@ package controllers;
 import tasks.Task;
 import tasks.Subtask;
 import tasks.Epic;
+import tasks.TaskType;
 
 import java.util.*;
 
@@ -16,9 +17,9 @@ public class TaskManager {
         int newId = generateNewId();
         newTask.setId(newId);
 
-        if(newTask.getClass() == Task.class) {
+        if(newTask.getType() == TaskType.TASK) {
             idToTask.put(newTask.getId(), newTask);
-        } else if(newTask.getClass() == Subtask.class) {
+        } else if(newTask.getType() == TaskType.SUBTASK) {
             Subtask subtask;
             try {
                 subtask = (Subtask) newTask;
@@ -33,7 +34,7 @@ public class TaskManager {
             } else {
                 return null;
             }
-        } else if (newTask.getClass() == Epic.class) {
+        } else if (newTask.getType() == TaskType.EPIC) {
             idToEpic.put(newTask.getId(), newTask);
         } else {
             return null;
@@ -44,11 +45,11 @@ public class TaskManager {
     public Task updateTask(Task updatedTask) {
         int id = updatedTask.getId();
 
-        if(idToTask.containsKey(id) && updatedTask.getClass() == Task.class) {
+        if(idToTask.containsKey(id) && updatedTask.getType() == TaskType.TASK) {
             idToTask.put(updatedTask.getId(), updatedTask);
             return updatedTask;
 
-        } else if(idToSubtask.containsKey(id) && updatedTask.getClass() == Subtask.class) {
+        } else if(idToSubtask.containsKey(id) && updatedTask.getType() == TaskType.SUBTASK) {
             Subtask subtaskMap = (Subtask) idToSubtask.get(updatedTask.getId());
             Subtask subtaskTemp;
 
@@ -62,13 +63,13 @@ public class TaskManager {
                 subtaskTemp.setCurrentEpic(subtaskMap.getCurrentEpic());
             }
 
-            Epic epic =  subtaskMap.getCurrentEpic();
+            Epic epic = subtaskMap.getCurrentEpic();
             epic.addSubtask(id, subtaskTemp);
             epic.refreshEpicStatus();
             idToSubtask.put(id, subtaskTemp);
             return subtaskTemp;
 
-        } else if (idToEpic.containsKey(id) && updatedTask.getClass() == Epic.class) {
+        } else if (idToEpic.containsKey(id) && updatedTask.getType() == TaskType.EPIC) {
             idToEpic.put(id, updatedTask);
             return updatedTask;
         } else {
@@ -79,11 +80,11 @@ public class TaskManager {
     public Task deleteTask(Task deleteTask) {
         Integer taskId = deleteTask.getId();
         Task removedTask;
-        if (idToTask.containsKey(taskId) && deleteTask.getClass() == Task.class) {
+        if (idToTask.containsKey(taskId) && deleteTask.getType() == TaskType.TASK) {
             removedTask = idToTask.get(taskId);
             idToTask.remove(taskId);
 
-        } else if (idToSubtask.containsKey(taskId) && deleteTask.getClass() == Subtask.class) {
+        } else if (idToSubtask.containsKey(taskId) && deleteTask.getType() == TaskType.SUBTASK) {
             Subtask subtask;
             try {
                 subtask = (Subtask) idToSubtask.get(taskId);
@@ -97,7 +98,7 @@ public class TaskManager {
             removedTask = idToSubtask.get(taskId);
             idToSubtask.remove(taskId);
 
-        } else if (idToEpic.containsKey(taskId) && deleteTask.getClass() == Epic.class) {
+        } else if (idToEpic.containsKey(taskId) && deleteTask.getType() == TaskType.EPIC) {
             removedTask = idToEpic.get(taskId);
             idToEpic.remove(taskId);
         } else {
@@ -159,6 +160,7 @@ public class TaskManager {
         }
         return null;
     }
+
 
     public void deleteEpicSubtasks(Task epicTask) {
         Epic epic;
