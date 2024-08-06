@@ -23,8 +23,9 @@ public class Epic extends Task{
         subtasks.put(id, subtask);
     }
 
-    public Map<Integer, Task> getSubtasks() {
-        return subtasks;
+    public List<Task> getSubtasks() {
+        List<Task> subtaskList = new ArrayList<>(subtasks.values());
+        return subtaskList;
     }
 
     public void removeSubtask(Integer id) {

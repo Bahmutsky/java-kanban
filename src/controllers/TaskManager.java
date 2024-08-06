@@ -154,7 +154,7 @@ public class TaskManager {
         }
 
         if (!epic.getSubtasks().isEmpty()) {
-            ArrayList<Task> subtasks = new ArrayList<>(epic.getSubtasks().values());
+            ArrayList<Task> subtasks = new ArrayList<>(epic.getSubtasks());
             return subtasks;
         }
         return null;
